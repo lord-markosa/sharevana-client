@@ -3,9 +3,7 @@ import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
-import dotEnv from "dotenv-webpack";
 import { fileURLToPath } from "url";
-import "dotenv/config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -65,7 +63,6 @@ const config = {
             chunkFilename: "[id].css",
         }),
         isDevelopment && new ReactRefreshWebpackPlugin(),
-        new dotEnv(),
     ].filter(Boolean),
     resolve: {
         extensions: [".js", ".jsx"],
@@ -76,7 +73,7 @@ const config = {
         },
         hot: true,
         historyApiFallback: true,
-        port: process.env.PORT || 3000,
+        port: process.env.PORT || 8080,
         open: true,
     },
 };

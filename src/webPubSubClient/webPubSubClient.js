@@ -1,5 +1,6 @@
 import { WebPubSubClient } from "@azure/web-pubsub-client";
 import { addMessage } from "../store/chatSlice";
+import { API_URL } from "../utils/apiUrl";
 
 const groupName = "test_group_01";
 
@@ -16,16 +17,13 @@ export async function initializePubSubClient(token, dispatch) {
     initializing = true;
 
     try {
-        const wpsToken = await fetch(
-            `${process.env.API_URL}/api/users/negotiate`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        const wpsToken = await fetch(`${API_URL}/api/users/negotiate`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
         const parsedWpsToken = await wpsToken.json();
 
