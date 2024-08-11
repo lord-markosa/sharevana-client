@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { showToast } from "../store/appConfigSlice";
+import { API_URL } from "../utils/apiUrl";
 
 const apiWrapper = (actionName, url, method = "get") => {
     return createAsyncThunk(
@@ -10,7 +11,7 @@ const apiWrapper = (actionName, url, method = "get") => {
             try {
                 const response = await axios({
                     method,
-                    url: `${process.env.API_URL}${url}`,
+                    url: `${API_URL}${url}`,
                     data,
                     headers: {
                         Authorization: `Bearer ${token}`,
