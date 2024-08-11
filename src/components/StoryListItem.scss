@@ -1,0 +1,37 @@
+@import "../utils/styleConstants.scss";
+
+.story {
+    padding: 8px;
+    border-radius: 10px;
+    border: 0.8px solid $grey-100;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+
+    // for overflow we make all the parent divs overflow: hidden
+    .story-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .story-content {
+        margin: 8px;
+    }
+
+    .bottomContainer {
+        margin-left: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .likeContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: $grey-300;
+            &.liked {
+                color: rgb(253, 78, 25);
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+import axios from "axios";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { showToast } from "../store/appConfigSlice";
+
+const apiWrapper = (actionName, url, method = "get") => {
+    return createAsyncThunk(
+        actionName,
+        async (data, { getState, dispatch, rejectWithValue }) => {
+            const token = getState().user.token;
+            try {
+                const response = await axios({
+                    method,
+                    url: `${process.env.API_URL}${url}`,
+                    data,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                return response.data;
+            } catch (error) {
+                const errorMessage =
+                    error.response?.data?.message || "An error occurred";
+                dispatch(showToast(errorMessage));
+                return rejectWithValue(errorMessage);
+            }
+        }
+    );
+};
+
+export default apiWrapper;
