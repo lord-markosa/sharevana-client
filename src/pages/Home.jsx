@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import StoryList from "./StoryList.jsx";
-import ChatList from "./ChatList.jsx";
-import ToggleSlider from "../components/ToggleSlider.jsx";
-import ConfirmationDialog from "../components/ConfirmationDialog.jsx";
-import FloatingAddButton from "../components/FloatingButton.jsx";
-import LoadingScreen from "../components/LoadingScreen.jsx";
+import StoryList from "./StoryList";
+import ChatList from "./ChatList";
+import ToggleSlider from "../components/ToggleSlider";
+import ConfirmationDialog from "../components/ConfirmationDialog";
+import FloatingAddButton from "../components/FloatingButton";
+import LoadingScreen from "../components/LoadingScreen";
 import { useNavigate } from "react-router-dom";
-import { toggleActiveTab } from "../store/userSlice.js";
+import { toggleActiveTab } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useConfirmation } from "../hooks/useConfirmation.js";
-import { initializePubSubClient } from "../webPubSubClient/webPubSubClient.js";
-import { fetchUser } from "../service/userService.js";
-import { fetchNewChat } from "../service/chatService.js";
+import { useConfirmation } from "../hooks/useConfirmation";
+import { initializePubSubClient } from "../webPubSubClient/webPubSubClient";
+import { fetchUser } from "../service/userService";
+import { fetchNewChat } from "../service/chatService";
 import "./Home.scss";
 
 const Home = () => {

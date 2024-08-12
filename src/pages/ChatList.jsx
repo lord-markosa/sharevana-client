@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import ChatListItem from "../components/ChatListItem.jsx";
-import Spinner from "../components/Spinner.jsx";
+import ChatListItem from "../components/ChatListItem";
+import Spinner from "../components/Spinner";
 
 const ChatList = () => {
     const chats = useSelector((state) => state.chat.chats);

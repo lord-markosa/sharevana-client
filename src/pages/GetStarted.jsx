@@ -1,4 +1,3 @@
-// frontend/src/pages/GetStarted.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import CalmYou from "../assets/CalmYou.svg";
