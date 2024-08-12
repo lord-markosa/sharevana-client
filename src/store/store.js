@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "./userSlice.js";
-import storySlice from "./storySlice.js";
-import chatSlice from "./chatSlice.js";
-import appConfigSlice from "./appConfigSlice.js";
+import userSlice from "./userSlice";
+import storySlice from "./storySlice";
+import chatSlice from "./chatSlice";
+import appConfigSlice from "./appConfigSlice";
 
 export const store = configureStore({
     reducer: {

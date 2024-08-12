@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import StoryListItem from "../components/StoryListItem.jsx";
+import StoryListItem from "../components/StoryListItem";
 import { useNavigate } from "react-router-dom";
-import Spinner from "../components/Spinner.jsx";
+import Spinner from "../components/Spinner";
 import "./StoryList.scss";
 
 const StoryList = ({ requestConfirmation }) => {
