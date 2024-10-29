@@ -1,29 +1,23 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import StoryListItem from "../components/StoryListItem";
-import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+
 import "./StoryList.scss";
 
 const StoryList = ({ requestConfirmation }) => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
     const loading = useSelector((state) => state.story.loading);
-    const stories = useSelector((state) => state.story.stories);
-    const username = useSelector((state) => state.user.username);
+    const storyList = useSelector((state) => state.story.storyList);
 
     return (
         <>
-            {stories.map((story) =>
-                StoryListItem({
-                    story,
-                    username,
-                    dispatch,
-                    navigate,
-                    requestConfirmation,
-                })
-            )}
+            {storyList.map((story) => (
+                <StoryListItem
+                    key={story.id}
+                    story={story}
+                    requestConfirmation={requestConfirmation}
+                />
+            ))}
             {loading && <Spinner small={true} />}
         </>
     );

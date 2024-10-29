@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUser } from "../service/userService";
 
 const appConfigSlice = createSlice({
     name: "appConfig",
     initialState: {
         toastMessage: null,
         showToast: false,
+        activeTabIndex: 0,
     },
     reducers: {
         showToast: (state, action) => {
@@ -16,11 +16,14 @@ const appConfigSlice = createSlice({
             state.toastMessage = null;
             state.showToast = false;
         },
+        toggleActiveTab: (state) => {
+            state.activeTabIndex = state.activeTabIndex ^ 1;
+        },
     },
 
     extraReducers: (/* builder */) => {},
 });
 
-export const { showToast, hideToast } = appConfigSlice.actions;
+export const { showToast, hideToast, toggleActiveTab } = appConfigSlice.actions;
 
 export default appConfigSlice.reducer;

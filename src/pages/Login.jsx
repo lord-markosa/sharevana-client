@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
-import LoginImg from "../assets/LoginImg.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "./Login.scss";
+import LoginImg from "../assets/LoginImg.svg";
 import LoadingScreen from "../components/LoadingScreen";
 import { loginUser } from "../service/userService";
+
+import "./Login.scss";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -13,9 +13,10 @@ const Login = () => {
     const [error, setError] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const isLoading = useSelector((state) => state.user.isLoading);
+    const status = useSelector((state) => state.user.status);
+    const isLoading = status === "loading";
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         if (username.length == 0) {
             setError("Username cannot be empty!");
@@ -26,8 +27,11 @@ const Login = () => {
             return;
         }
 
-        dispatch(loginUser({ username, password }));
-        navigate("/home");
+        await dispatch(loginUser({ username, password }));
+
+        if (status === "succeeded") {
+            navigate("/home");
+        }
     };
 
     const goToRegister = () => {
@@ -59,7 +63,11 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button className="login-button" onClick={handleLogin}>
+                <button
+                    className="login-button"
+                    onClick={handleLogin}
+                    disabled={isLoading}
+                >
                     Let's Begin
                 </button>
             </div>

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+
 import "./ToggleSlider.scss";
 
 const ToggleSlider = ({ tab1, tab2, tabIndex, handleTabChange }) => (

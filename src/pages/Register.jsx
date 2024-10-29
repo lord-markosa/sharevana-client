@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "./Login.scss";
 import LoginImg from "../assets/LoginImg.svg";
 import LoadingScreen from "../components/LoadingScreen";
 import { registerUser } from "../service/userService";
+
+import "./Login.scss";
 
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -15,7 +16,8 @@ const Register = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const isLoading = useSelector((state) => state.user.isLoading);
+    const status = useSelector((state) => state.user.status);
+    const isLoading = status === "loading";
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -32,8 +34,11 @@ const Register = () => {
             return;
         }
 
-        dispatch(registerUser({ username, password }));
-        navigate("/home");
+        await dispatch(registerUser({ username, password }));
+
+        if (status === "succeeded") {
+            navigate("/home");
+        }
     };
 
     const goToLogin = () => {
@@ -72,7 +77,11 @@ const Register = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <button className="login-button" onClick={handleRegister}>
+                <button
+                    className="login-button"
+                    onClick={handleRegister}
+                    disabled={isLoading}
+                >
                     Let's Begin
                 </button>
             </div>

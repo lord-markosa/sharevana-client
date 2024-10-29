@@ -9,12 +9,15 @@ module.exports = function (env, { mode }) {
     return {
         entry: "./src/index.js",
         output: isDevelopment
-            ? { clean: true }
+            ? {
+                  publicPath: "/",
+                  clean: true,
+              }
             : {
                   path: path.resolve(__dirname, "./build"),
                   filename: "main.js",
                   assetModuleFilename: "media/[name].[contenthash:8][ext]",
-                  publicPath: "",
+                  publicPath: "/",
                   clean: true,
               },
         mode: isDevelopment ? "development" : "production",

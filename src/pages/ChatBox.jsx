@@ -1,62 +1,40 @@
 import React, { useState, useEffect, useRef } from "react";
-import Persona from "../components/Persona";
-import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { IoSend } from "react-icons/io5";
+import Persona from "../components/Persona";
 import LoadingScreen from "../components/LoadingScreen";
 import { initializePubSubClient } from "../webPubSubClient/webPubSubClient";
-import { fetchUser } from "../service/userService";
-import { fetchMessages, sendMessage } from "../service/chatService";
-import "./ChatBox.scss";
+import { sendMessage } from "../service/chatService";
 import Spinner from "../components/Spinner";
+
+import "./ChatBox.scss";
 
 const ChatBox = () => {
     const params = useParams();
-    const chatId = params?.id;
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const chatId = params?.id;
+
     const textareaRef = useRef(null);
     const msgListRef = useRef(null);
+
     const [newMessage, setNewMessage] = useState("");
 
-    const {
-        username,
-        fetched: userFetched,
-        isLoading: userLoading,
-        token,
-    } = useSelector((state) => state.user);
-
-    const chatDetail = useSelector((state) =>
-        state.chat.chats.find((chat) => chat.id === chatId)
-    );
-
-    const messages = useSelector((state) => state.chat.messages[chatId]);
-    const loadingMessages = useSelector(
-        (state) => state.chat.loadingMessages[chatId]
+    const { loadingMessages, messages, chatDetail, wpsUrl } = useSelector(
+        (state) => ({
+            loadingMessages: state.chat.loadingMessages[chatId],
+            messages: state.chat.messages[chatId],
+            chatDetail: state.chat.chats.find((chat) => chat.chatId === chatId),
+            wpsUrl: state.user.wpsUrl,
+        })
     );
 
     useEffect(() => {
-        if (!userFetched && !userLoading) {
-            dispatch(fetchUser(token));
-        }
-
-        if (token) {
-            initializePubSubClient(token, dispatch);
-        }
-
-        if (!messages && !loadingMessages) {
-            dispatch(fetchMessages(chatId));
-        }
-    }, [
-        token,
-        chatId,
-        userFetched,
-        messages,
-        userLoading,
-        loadingMessages,
-        dispatch,
-    ]);
+        initializePubSubClient(wpsUrl, dispatch);
+    }, []);
 
     useEffect(() => {
         const msgList = msgListRef.current;
@@ -96,7 +74,7 @@ const ChatBox = () => {
         setNewMessage(textarea.value);
     };
 
-    return !userFetched || !messages ? (
+    return !messages ? (
         <LoadingScreen msg="Sharing reduces stress, increases happiness..." />
     ) : (
         <div className="chat-screen">
@@ -104,19 +82,17 @@ const ChatBox = () => {
                 <button className="back-button" onClick={onBack}>
                     <FiArrowLeft size={24} />
                 </button>
-                <Persona
-                    title={
-                        chatDetail.username1 === username
-                            ? chatDetail.username2
-                            : chatDetail.username1
-                    }
-                />
+                <Persona title={chatDetail.partnerName} />
             </div>
             <div className="chat-messages" ref={msgListRef}>
                 {messages.map((msg) => (
                     <div
-                        key={msg.id}
-                        className={`message ${msg.sent ? "self" : "other"}`}
+                        key={msg.timestamp}
+                        className={`message ${
+                            !!msg.sentBy1 ^ !!chatDetail.isUser1
+                                ? "other"
+                                : "self"
+                        }`}
                     >
                         {msg.content}
                     </div>

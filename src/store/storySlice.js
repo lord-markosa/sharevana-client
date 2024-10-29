@@ -1,87 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUser, loginUser, registerUser } from "../service/userService";
-import {
-    addStory,
-    deleteStory,
-    likeStory,
-    updateStory,
-} from "../service/storyService";
+import { addStory, deleteStory, updateStory } from "../service/storyService";
 
 const storySlice = createSlice({
     name: "story",
     initialState: {
-        stories: [],
+        storyList: [],
         loading: false,
-        status: "idle",
         error: null,
-        editingStoryId: null,
-        editContent: "",
     },
-    reducers: {
-        storyAdded: (state, action) => {
-            state.stories.push(action.payload);
-        },
-        startEditingStory: (state, action) => {
-            const { storyId, content } = action.payload;
-            state.editingStoryId = storyId;
-            state.editContent = content;
-        },
-        cancelEditingStory: (state) => {
-            state.editingStoryId = null;
-            state.editContent = "";
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
+        [loginUser, registerUser, fetchUser].forEach((apiCall) => {
+            builder.addCase(apiCall.fulfilled, (state, action) => {
+                state.storyList = action.payload.storyList;
+            });
+        });
         builder
-            .addCase(loginUser.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.stories = action.payload.storyList;
-                parseLikedBy(state);
-            })
-            .addCase(registerUser.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.stories = action.payload.storyList;
-                parseLikedBy(state);
-            })
-            .addCase(fetchUser.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.stories = action.payload.storyList;
-                parseLikedBy(state);
-            })
+            // Add story
             .addCase(addStory.pending, (state, action) => {
                 state.loading = true;
             })
             .addCase(addStory.fulfilled, (state, action) => {
-                state.stories.push(action.payload);
+                state.storyList.push(action.payload);
                 state.loading = false;
             })
             .addCase(addStory.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             })
-            .addCase(likeStory.pending, (state, action) => {
-                state.loading = true;
-            })
-            .addCase(likeStory.fulfilled, (state, action) => {
-                const { storyId, username } = action.payload;
-                const existingStory = state.stories.find(
-                    (story) => story.id === storyId
-                );
-                if (existingStory) {
-                    existingStory.likedBy.push(username);
-                }
-                state.loading = false;
-            })
-            .addCase(likeStory.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message;
-            })
+
+            // Delete story
             .addCase(deleteStory.pending, (state, action) => {
                 state.loading = true;
             })
             .addCase(deleteStory.fulfilled, (state, action) => {
-                const storyId = action.payload;
-                state.stories = state.stories.filter(
+                const storyId = action.meta.arg.storyId;
+                state.storyList = state.storyList.filter(
                     (story) => story.id !== storyId
                 );
                 state.loading = false;
@@ -90,19 +45,16 @@ const storySlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message;
             })
+
+            // Update story
             .addCase(updateStory.pending, (state, action) => {
                 state.loading = true;
             })
             .addCase(updateStory.fulfilled, (state, action) => {
-                const { storyId, content } = action.payload;
-                const existingStory = state.stories.find(
-                    (story) => story.id === storyId
+                const { storyId, content } = action.meta.arg;
+                state.storyList = state.storyList.map((story) =>
+                    story.id === storyId ? { ...story, content } : story
                 );
-                if (existingStory) {
-                    existingStory.content = content;
-                }
-                state.editingStoryId = null; // Clear editing state after update
-                state.editContent = "";
                 state.loading = false;
             })
             .addCase(updateStory.rejected, (state, action) => {
@@ -116,10 +68,3 @@ export const { storyAdded, startEditingStory, cancelEditingStory } =
     storySlice.actions;
 
 export default storySlice.reducer;
-
-const parseLikedBy = (state) => {
-    state.stories = state.stories?.map((story) => ({
-        ...story,
-        likedBy: JSON.parse(story.likedBy),
-    }));
-};
