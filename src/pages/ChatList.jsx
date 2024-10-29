@@ -4,14 +4,15 @@ import ChatListItem from "../components/ChatListItem";
 import Spinner from "../components/Spinner";
 
 const ChatList = () => {
-    const chats = useSelector((state) => state.chat.chats);
-    const username = useSelector((state) => state.user.username);
-    const loadingNewChat = useSelector((state) => state.chat.loadingNewChat);
+    const { loadingNewChat, chats } = useSelector((state) => ({
+        loadingNewChat: state.chat.loadingNewChat,
+        chats: state.chat.chats,
+    }));
 
     return (
         <>
             {chats.map((chat) => (
-                <ChatListItem key={chat.id} chat={chat} user={username} />
+                <ChatListItem key={chat.chatId} chat={chat} />
             ))}
             {loadingNewChat && <Spinner small={true} />}
         </>

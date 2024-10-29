@@ -1,26 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import StoryList from "./StoryList";
 import ChatList from "./ChatList";
 import ToggleSlider from "../components/ToggleSlider";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import FloatingAddButton from "../components/FloatingButton";
-import LoadingScreen from "../components/LoadingScreen";
-import { useNavigate } from "react-router-dom";
-import { toggleActiveTab } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useConfirmation } from "../hooks/useConfirmation";
-import { initializePubSubClient } from "../webPubSubClient/webPubSubClient";
-import { fetchUser } from "../service/userService";
 import { fetchNewChat } from "../service/chatService";
+import { toggleActiveTab } from "../store/appConfigSlice";
+
 import "./Home.scss";
 
 const Home = () => {
-    const { isLoading, activeTabIndex, token, fetched } = useSelector(
-        (state) => state.user
-    );
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const activeTabIndex = useSelector(
+        (state) => state.appConfig.activeTabIndex
+    );
 
     const {
         isOpen,
@@ -29,16 +26,6 @@ const Home = () => {
         handleCancel,
         requestConfirmation,
     } = useConfirmation();
-
-    useEffect(() => {
-        if (!fetched) {
-            dispatch(fetchUser());
-        }
-
-        if (token) {
-            initializePubSubClient(token, dispatch);
-        }
-    }, [dispatch, fetched, token]);
 
     const handleTabChange = () => {
         dispatch(toggleActiveTab());
@@ -60,9 +47,7 @@ const Home = () => {
         },
     ];
 
-    return isLoading ? (
-        <LoadingScreen />
-    ) : (
+    return (
         <div className="home-page">
             <ToggleSlider
                 tab1="Everyone"

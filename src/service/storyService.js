@@ -1,21 +1,23 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiWrapper from "./apiWrapper";
+import makeRequest from "./makeRequest";
 
 export const addStory = apiWrapper("stories/addStory", "/api/story", "post");
 
-export const likeStory = apiWrapper(
+export const likeStory = createAsyncThunk(
     "stories/likeStory",
-    "/api/story/like",
-    "post"
+    async ({ storyId }, thunkApi) =>
+        makeRequest(`/api/story/${storyId}/like`, "get", thunkApi)
 );
 
-export const updateStory = apiWrapper(
+export const updateStory = createAsyncThunk(
     "stories/updateStory",
-    "/api/story",
-    "put"
+    async ({ storyId, content }, thunkApi) =>
+        makeRequest(`/api/story/${storyId}`, "put", thunkApi, { content })
 );
 
-export const deleteStory = apiWrapper(
+export const deleteStory = createAsyncThunk(
     "stories/deleteStory",
-    "/api/story",
-    "delete"
+    async ({ storyId }, thunkApi) =>
+        makeRequest(`/api/story/${storyId}`, "delete", thunkApi)
 );

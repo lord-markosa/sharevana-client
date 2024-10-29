@@ -1,44 +1,49 @@
 import React from "react";
-import "./StoryListItem.scss";
 import Persona from "./Persona";
 import DropdownMenu from "./DropdownMenu";
 import getFormattedTime from "../utils/getFormattedTime";
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { deleteStory, likeStory } from "../service/storyService";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-export default function StoryListItem({
-    story,
-    username,
-    dispatch,
-    navigate,
-    requestConfirmation,
-}) {
+import "./StoryListItem.scss";
+
+export default function StoryListItem({ story, requestConfirmation }) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { likedStories, username } = useSelector((state) => ({
+        likedStories: state.user.likedStories,
+        username: state.user.username,
+    }));
+    const storyId = story.id;
+
     const handleDelete = () => {
         requestConfirmation("Are you sure you want to delete this story?", () =>
-            dispatch(deleteStory(story.id))
+            dispatch(deleteStory({ storyId }))
         );
     };
 
     const handleLike = () => {
-        dispatch(likeStory({ storyId: story.id, username }));
+        dispatch(likeStory({ storyId }));
     };
 
-    const handleEdit = (story) => {
-        navigate("/new-story", { state: story });
+    const handleEdit = (_story) => {
+        navigate("/new-story", { state: _story });
     };
 
-    const isLiked = story.likedBy.includes(username);
+    const isLiked = likedStories.includes(storyId);
 
     return (
         <div key={story.id} className="story">
             <div className="story-header">
                 <Persona
-                    title={story.creator}
-                    subtitle={getFormattedTime(Date(story.createdAt))}
+                    title={story.createdBy}
+                    subtitle={getFormattedTime(story.createdAt)}
                 />
 
-                {story.creator == username && (
+                {username === story.createdBy && (
                     <DropdownMenu
                         options={[
                             {
@@ -47,7 +52,7 @@ export default function StoryListItem({
                             },
                             {
                                 label: "Delete",
-                                onClick: () => handleDelete(story.id),
+                                onClick: () => handleDelete(storyId),
                             },
                         ]}
                         position="right"

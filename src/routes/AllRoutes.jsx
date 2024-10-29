@@ -1,50 +1,87 @@
 import React from "react";
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Navigate,
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import GetStarted from "../pages/GetStarted";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
-import { useSelector } from "react-redux";
 import Home from "../pages/Home";
 import Story from "../pages/Story";
 import ChatBox from "../pages/ChatBox";
+import { fetchUser } from "../service/userService";
+import AuthRoutes from "./AuthRoutes";
+import ProtectedRoutes from "./ProtectedRoutes";
+import { fetchMessages } from "../service/chatService";
 
 const AllRoutes = () => {
-    const { token, error } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const token = localStorage.getItem("token");
+    const router = createBrowserRouter([
+        {
+            loader: async () => {
+                if (token && token !== "undefined") {
+                    await dispatch(fetchUser());
+                }
+                return null;
+            },
+            children: [
+                {
+                    index: true,
+                    path: "*",
+                    element: <GetStarted />,
+                },
+                {
+                    element: <AuthRoutes />,
+                    children: [
+                        {
+                            path: "login",
+                            element: <Login />,
+                        },
+                        {
+                            path: "register",
+                            element: <Register />,
+                        },
+                    ],
+                },
+                {
+                    element: <ProtectedRoutes />,
+                    children: [
+                        {
+                            path: "home",
+                            element: <Home />,
+                            // [TODO] Add children to Home
+                            // children: [
+                            //     {
+                            //         index: true,
+                            //         element: <StoryList />,
+                            //     },
+                            //     {
+                            //         path: "chats",
+                            //         element: <ChatList />,
+                            //     },
+                            // ],
+                        },
+                        {
+                            path: "chat/:id",
+                            element: <ChatBox />,
+                            loader: ({ params }) => {
+                                const chatId = params?.id;
+                                if (chatId) {
+                                    dispatch(fetchMessages({ chatId }));
+                                }
+                                return null;
+                            },
+                        },
+                        {
+                            path: "new-story",
+                            element: <Story />,
+                        },
+                    ],
+                },
+            ],
+        },
+    ]);
 
-    const AuthPageWrapper = (authElement) =>
-        token && !error ? <Navigate to="/home" /> : authElement;
-
-    const PrivatePageWrapper = (privateElement) =>
-        token && !error ? privateElement : <Navigate to="/login" />;
-
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<GetStarted />} />
-                <Route path="/login" element={AuthPageWrapper(<Login />)} />
-                <Route
-                    path="/register"
-                    element={AuthPageWrapper(<Register />)}
-                />
-                <Route path="/home" element={PrivatePageWrapper(<Home />)} />
-                <Route
-                    path="/new-story"
-                    element={PrivatePageWrapper(<Story />)}
-                />
-                <Route
-                    path="/chat/:id"
-                    element={PrivatePageWrapper(<ChatBox />)}
-                />
-
-                <Route path="*" element={<Navigate to="/home" />} />
-            </Routes>
-        </Router>
-    );
+    return <RouterProvider router={router} />;
 };
 
 export default AllRoutes;

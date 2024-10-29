@@ -1,15 +1,12 @@
 import { WebPubSubClient } from "@azure/web-pubsub-client";
 import { addMessage } from "../store/chatSlice";
-import { API_URL } from "../utils/apiUrl";
-
-const groupName = "test_group_01";
 
 let pubSubClient;
 
 let initialized = false;
 let initializing = false;
 
-export async function initializePubSubClient(token, dispatch) {
+export async function initializePubSubClient(url, dispatch) {
     if (initializing || initialized) {
         return;
     }
@@ -17,17 +14,7 @@ export async function initializePubSubClient(token, dispatch) {
     initializing = true;
 
     try {
-        const wpsToken = await fetch(`${API_URL}/api/users/negotiate`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        const parsedWpsToken = await wpsToken.json();
-
-        const client = new WebPubSubClient(parsedWpsToken.url);
+        const client = new WebPubSubClient(url);
         await client.start();
 
         client.on("connected", (e) => {
@@ -40,7 +27,8 @@ export async function initializePubSubClient(token, dispatch) {
 
         client.on("server-message", (e) => {
             const receivedData = e.message.data;
-            console.log(receivedData);
+            // FOR DEBUGGING: Received message from server
+            // console.log(receivedData);
             dispatch(
                 addMessage({
                     chatId: receivedData.chatId,
