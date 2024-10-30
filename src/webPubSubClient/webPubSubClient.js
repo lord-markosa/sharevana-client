@@ -18,11 +18,13 @@ export async function initializePubSubClient(url, dispatch) {
         await client.start();
 
         client.on("connected", (e) => {
-            console.log("connected", e.connectionId);
+            // FOR DEBUGGING: Connected to server
+            // console.log("connected", e.connectionId);
         });
 
         client.on("disconnected", (e) => {
-            console.log("disconnected", e.message);
+            // FOR DEBUGGING: Disconnected from server
+            // console.log("disconnected", e.message);
         });
 
         client.on("server-message", (e) => {

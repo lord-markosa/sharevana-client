@@ -10,16 +10,18 @@ const chatSlice = createSlice({
     name: "chat",
     initialState: {
         chats: [],
-        messages: {},
-        loadingMessages: {},
+        messagesById: {},
+        isMessageLoadingById: {},
         status: "idle",
         error: null,
         chatLoadState: null,
-        loadingNewChat: false,
+        isNewChatLoading: false,
     },
     reducers: {
         addMessage: (state, action) => {
-            state.messages[action.payload.chatId].push(action.payload.message);
+            state.messagesById[action.payload.chatId].push(
+                action.payload.message
+            );
         },
     },
     extraReducers: (builder) => {
@@ -32,41 +34,41 @@ const chatSlice = createSlice({
         builder
             // Fetch messages
             .addCase(fetchMessages.pending, (state, action) => {
-                state.loadingMessages[action.meta.arg.chatId] = true;
+                state.isMessageLoadingById[action.meta.arg.chatId] = true;
             })
             .addCase(fetchMessages.fulfilled, (state, action) => {
-                state.messages[action.meta.arg.chatId] =
+                state.messagesById[action.meta.arg.chatId] =
                     action.payload.messages;
-                state.loadingMessages[action.meta.arg.chatId] = false;
+                state.isMessageLoadingById[action.meta.arg.chatId] = false;
             })
             .addCase(fetchMessages.rejected, (state, action) => {
-                state.loadingMessages[action.meta.arg.chatId] = false;
+                state.isMessageLoadingById[action.meta.arg.chatId] = false;
             })
 
             // Fetch new chat
             .addCase(fetchNewChat.pending, (state, action) => {
-                state.loadingNewChat = true;
+                state.isNewChatLoading = true;
             })
             .addCase(fetchNewChat.fulfilled, (state, action) => {
                 if (action.payload) {
                     state.chats.push(action.payload);
                 }
-                state.loadingNewChat = false;
+                state.isNewChatLoading = false;
             })
             .addCase(fetchNewChat.rejected, (state, action) => {
-                state.loadingNewChat = false;
+                state.isNewChatLoading = false;
             })
 
             // Send message
             .addCase(sendMessage.pending, (state, action) => {
-                state.loadingMessages[action.meta.arg.chatId] = true;
+                state.isMessageLoadingById[action.meta.arg.chatId] = true;
             })
             .addCase(sendMessage.fulfilled, (state, action) => {
-                state.messages[action.meta.arg.chatId].push(action.payload);
-                state.loadingMessages[action.meta.arg.chatId] = false;
+                state.messagesById[action.meta.arg.chatId].push(action.payload);
+                state.isMessageLoadingById[action.meta.arg.chatId] = false;
             })
             .addCase(sendMessage.rejected, (state, action) => {
-                state.loadingMessages[action.meta.arg.chatId] = false;
+                state.isMessageLoadingById[action.meta.arg.chatId] = false;
             });
     },
 });

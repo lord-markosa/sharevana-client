@@ -4,10 +4,10 @@ import StoryListItem from "../components/StoryListItem";
 import Spinner from "../components/Spinner";
 
 import "./StoryList.scss";
+import { selectStoryList } from "../selectors/storySelectors";
 
 const StoryList = ({ requestConfirmation }) => {
-    const loading = useSelector((state) => state.story.loading);
-    const storyList = useSelector((state) => state.story.storyList);
+    const { loading, storyList } = useSelector(selectStoryList);
 
     return (
         <>

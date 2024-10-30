@@ -2,19 +2,21 @@ import React from "react";
 import { useSelector } from "react-redux";
 import ChatListItem from "../components/ChatListItem";
 import Spinner from "../components/Spinner";
+import {
+    selectChats,
+    selectIsNewChatLoading,
+} from "../selectors/chatSelectors";
 
 const ChatList = () => {
-    const { loadingNewChat, chats } = useSelector((state) => ({
-        loadingNewChat: state.chat.loadingNewChat,
-        chats: state.chat.chats,
-    }));
+    const isNewChatLoading = useSelector(selectIsNewChatLoading);
+    const chats = useSelector(selectChats);
 
     return (
         <>
             {chats.map((chat) => (
                 <ChatListItem key={chat.chatId} chat={chat} />
             ))}
-            {loadingNewChat && <Spinner small={true} />}
+            {isNewChatLoading && <Spinner small={true} />}
         </>
     );
 };

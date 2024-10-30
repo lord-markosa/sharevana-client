@@ -8,6 +8,8 @@ import LoadingScreen from "../components/LoadingScreen";
 import { initializePubSubClient } from "../webPubSubClient/webPubSubClient";
 import { sendMessage } from "../service/chatService";
 import Spinner from "../components/Spinner";
+import { selectWpsUrl } from "../selectors/userSelectors";
+import { selectMessageDetailsById } from "../selectors/chatSelectors";
 
 import "./ChatBox.scss";
 
@@ -23,14 +25,10 @@ const ChatBox = () => {
 
     const [newMessage, setNewMessage] = useState("");
 
-    const { loadingMessages, messages, chatDetail, wpsUrl } = useSelector(
-        (state) => ({
-            loadingMessages: state.chat.loadingMessages[chatId],
-            messages: state.chat.messages[chatId],
-            chatDetail: state.chat.chats.find((chat) => chat.chatId === chatId),
-            wpsUrl: state.user.wpsUrl,
-        })
+    const { messages, isMessageLoading, chatDetail } = useSelector((state) =>
+        selectMessageDetailsById(state, chatId)
     );
+    const wpsUrl = useSelector(selectWpsUrl);
 
     useEffect(() => {
         initializePubSubClient(wpsUrl, dispatch);
@@ -40,7 +38,7 @@ const ChatBox = () => {
         const msgList = msgListRef.current;
         if (!msgList) return;
         msgList.scrollTop = msgList.scrollHeight;
-    }, [messages?.length, loadingMessages]);
+    }, [messages?.length, isMessageLoading]);
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -97,7 +95,7 @@ const ChatBox = () => {
                         {msg.content}
                     </div>
                 ))}
-                {loadingMessages && <Spinner small={true} />}
+                {isMessageLoading && <Spinner small={true} />}
             </div>
             <div className="chat-footer">
                 <textarea
