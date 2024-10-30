@@ -1,23 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LoginImg from "../assets/LoginImg.svg";
 import LoadingScreen from "../components/LoadingScreen";
 import { registerUser } from "../service/userService";
+import { selectUserStatus } from "../selectors/userSelectors";
 
 import "./Login.scss";
 
 const Register = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const status = useSelector((state) => state.user.status);
-    const isLoading = status === "loading";
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [confirmPassword, setConfirmPassword] = React.useState("");
+    const [error, setError] = React.useState("");
+
+    const userStatus = useSelector(selectUserStatus);
+    const isLoading = userStatus === "loading";
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -36,7 +37,7 @@ const Register = () => {
 
         await dispatch(registerUser({ username, password }));
 
-        if (status === "succeeded") {
+        if (userStatus === "succeeded") {
             navigate("/home");
         }
     };

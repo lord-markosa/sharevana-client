@@ -1,11 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
+import { selectUserStatus } from "../selectors/userSelectors";
 
 export default function AuthRoutes() {
-    const userFetched = useSelector(
-        (state) => state.user.status === "succeeded"
-    );
+    const userStatus = useSelector(selectUserStatus);
 
-    return userFetched ? <Navigate to="/home" /> : <Outlet />;
+    return userStatus === "succeeded" ? <Navigate to="/home" /> : <Outlet />;
 }

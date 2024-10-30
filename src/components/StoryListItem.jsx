@@ -9,14 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import "./StoryListItem.scss";
+import { selectLikedStories, selectUsername } from "../selectors/userSelectors";
 
 export default function StoryListItem({ story, requestConfirmation }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { likedStories, username } = useSelector((state) => ({
-        likedStories: state.user.likedStories,
-        username: state.user.username,
-    }));
+
+    const likedStories = useSelector(selectLikedStories);
+    const username = useSelector(selectUsername);
     const storyId = story.id;
 
     const handleDelete = () => {

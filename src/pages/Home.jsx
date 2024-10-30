@@ -9,15 +9,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useConfirmation } from "../hooks/useConfirmation";
 import { fetchNewChat } from "../service/chatService";
 import { toggleActiveTab } from "../store/appConfigSlice";
+import { selectActiveTabIndex } from "../selectors/appConfigSelectors";
 
 import "./Home.scss";
 
 const Home = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const activeTabIndex = useSelector(
-        (state) => state.appConfig.activeTabIndex
-    );
+
+    const activeTabIndex = useSelector(selectActiveTabIndex);
 
     const {
         isOpen,
