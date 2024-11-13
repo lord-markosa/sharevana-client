@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Persona from "./Persona";
+import Persona from "../../components/Persona";
 
 import "./ChatListItem.scss";
 

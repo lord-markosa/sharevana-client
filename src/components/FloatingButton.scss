@@ -2,24 +2,21 @@
 
 .floating-add-button {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
+    bottom: 16px;
+    right: 8px;
+    width: 3.5rem;
+    height: 3.5rem;
     background-color: $theme-color-dark;
     border: none;
     border-radius: 50%;
     color: white;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include centered;
     font-size: 2rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: background-color 0.3s;
 
     &:active {
-        background-color: #0046c8; // Adjust the active color as needed
+        background-color: $theme-color-dark-50; // Adjust the active color as needed
     }
 }

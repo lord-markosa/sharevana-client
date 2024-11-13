@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
-import "./Story.scss";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import ConfirmationDialog from "../components/ConfirmationDialog";
-import { useConfirmation } from "../hooks/useConfirmation";
-import { addStory, updateStory } from "../service/storyService";
+import ConfirmationDialog from "../../components/ConfirmationDialog";
+import { useConfirmation } from "../../hooks/useConfirmation";
+import { addStory, updateStory } from "../../service/storyService";
+import Button from "../../components/Button";
+import TextArea from "../../components/TextArea";
+
+import "./StoryForm.scss";
 
 const Story = () => {
     const navigate = useNavigate();
@@ -24,8 +27,6 @@ const Story = () => {
     const [storyContent, setStoryContent] = useState(
         isEditing ? story.content : ""
     );
-
-    const handleContentChange = (e) => setStoryContent(e.target.value);
 
     const actionHandler = () => {
         if (storyContent.trim() === "") return;
@@ -55,22 +56,37 @@ const Story = () => {
     };
 
     return (
-        <div className="new-story">
+        <>
             <div className="post-form">
-                <textarea
+                <TextArea
                     placeholder="Share with us..."
                     value={storyContent}
-                    onChange={handleContentChange}
+                    setValue={setStoryContent}
                     className="content-textarea"
-                    rows="4"
+                    minRows={16}
+                    maxRows={16}
                 />
-                <div className="actions">
-                    <button className="post-button" onClick={actionHandler}>
-                        {isEditing ? "Update" : "Share"}
-                    </button>
-                    <button className="cancel-button" onClick={onCancel}>
-                        Cancel
-                    </button>
+                <div className="buttons-container">
+                    {[
+                        {
+                            label: isEditing ? "Update" : "Share",
+                            action: actionHandler,
+                        },
+                        {
+                            label: "Cancel",
+                            type: "secondary",
+                            action: onCancel,
+                        },
+                    ].map(({ label, type, action }, idx) => (
+                        <Button
+                            type={type}
+                            key={`story-action-button-${idx}`}
+                            className={`action-button-${idx}`}
+                            onClick={action}
+                        >
+                            {label}
+                        </Button>
+                    ))}
                 </div>
             </div>
             {isOpen && (
@@ -80,7 +96,7 @@ const Story = () => {
                     onCancel={handleCancel}
                 />
             )}
-        </div>
+        </>
     );
 };
 

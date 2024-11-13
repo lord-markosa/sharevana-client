@@ -1,0 +1,61 @@
+@import "../../utils/styleConstants.scss";
+
+.get-started {
+    @include page-standard;
+    padding: 1.5rem;
+    text-align: center;
+
+    .header-image {
+        margin-bottom: 20px;
+        height: 24rem;
+    }
+
+    .title {
+        @include title;
+    }
+
+    .tagline {
+        @include subtitle;
+    }
+
+    .carousel {
+        padding: 8px 0;
+        font-family: $subtitle-font;
+
+        .description {
+            margin-bottom: 20px;
+            min-height: 80px;
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: $grey-200;
+                margin: 0 5px;
+                transition: background-color 0.3s;
+
+                &.active {
+                    background-color: $theme-color-dark;
+                }
+            }
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+
+            .carousel-button {
+                display: flex;
+                padding: 0 4px;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+}

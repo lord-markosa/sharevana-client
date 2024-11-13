@@ -1,6 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import CalmYou from "../assets/CalmYou.svg";
+import CalmYou from "../../assets/CalmYou.svg";
+import { IoCaretForward } from "react-icons/io5";
+import { IoPlayForward } from "react-icons/io5";
+import { IoCaretBack } from "react-icons/io5";
+import Button from "../../components/Button";
+
 import "./GetStarted.scss";
 
 const GetStarted = () => {
@@ -31,9 +36,14 @@ const GetStarted = () => {
         } else setCarouselIndex(carouselIndex - 1);
     };
 
+    const props = {
+        size: 24,
+        style: { padding: "4px" },
+    };
+
     return (
         <div className="get-started">
-            <img src={CalmYou} alt="Sharevana" className="header-image" />
+            <img src={CalmYou} alt="Sharevana Img" className="header-image" />
             <div className="title">Sharevana</div>
             <div className="tagline">{subtitles[carouselIndex]}</div>
             <div className="carousel">
@@ -49,12 +59,20 @@ const GetStarted = () => {
                     ))}
                 </div>
                 <div className="carousel-controls">
-                    <button className="skip-button" onClick={handleSkip}>
-                        {carouselIndex === 0 ? "Skip" : "Previous"}
-                    </button>
-                    <button className="next-button" onClick={handleNext}>
-                        Next
-                    </button>
+                    <Button
+                        className="carousel-button"
+                        type="secondary"
+                        onClick={handleSkip}
+                    >
+                        {carouselIndex ? (
+                            <IoCaretBack {...props} />
+                        ) : (
+                            <IoPlayForward {...props} />
+                        )}
+                    </Button>
+                    <Button className="carousel-button" onClick={handleNext}>
+                        <IoCaretForward {...props} />
+                    </Button>
                 </div>
             </div>
         </div>

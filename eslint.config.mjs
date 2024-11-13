@@ -18,4 +18,9 @@ export default [
             "test/**",
         ],
     },
+    {
+        rules: {
+            "react/prop-types": "off",
+        },
+    },
 ];

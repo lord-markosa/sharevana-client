@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUser, loginUser, registerUser } from "../service/userService";
 import { likeStory } from "../service/storyService";
+import { setToken } from "../utils/userToken";
 
 const initialState = {
-    token: null,
     username: null,
     likedStories: [],
     status: "idle",
@@ -16,11 +16,7 @@ const initialState = {
 export const userSlice = createSlice({
     name: "user",
     initialState,
-    reducers: {
-        cacheToken: (state, action) => {
-            state.token = action.payload;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         [fetchUser, loginUser, registerUser].forEach((apiCall) => {
             builder
@@ -30,12 +26,11 @@ export const userSlice = createSlice({
                 .addCase(apiCall.fulfilled, (state, action) => {
                     state.status = "succeeded";
                     state.username = action.payload.username;
-                    state.token = action.payload.token;
                     state.likedStories = action.payload.likedStories;
                     state.wpsUrl = action.payload.negotiation.url;
-                    localStorage.setItem("token", action.payload.token);
+                    setToken(action.payload.token);
                 })
-                .addCase(apiCall.rejected, (state, action) => {
+                .addCase(apiCall.rejected, (state) => {
                     state.status = "failed";
                 });
         });
@@ -50,7 +45,6 @@ export const userSlice = createSlice({
 export const {
     // [TODO] Implement logout functionality
     // logoutUser,
-    cacheToken,
     toggleActiveTab,
 } = userSlice.actions;
 

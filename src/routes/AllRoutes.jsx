@@ -1,24 +1,25 @@
 import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import GetStarted from "../pages/GetStarted";
-import Register from "../pages/Register";
-import Login from "../pages/Login";
-import Home from "../pages/Home";
-import Story from "../pages/Story";
-import ChatBox from "../pages/ChatBox";
-import { fetchUser } from "../service/userService";
+import GetStarted from "../pages/start/GetStarted";
+import Register from "../pages/auth/Register";
+import Login from "../pages/auth/Login";
+import Home from "../pages/home/Home";
+import StoryForm from "../pages/story/StoryForm";
+import ChatBox from "../pages/chat/ChatBox";
 import AuthRoutes from "./AuthRoutes";
 import ProtectedRoutes from "./ProtectedRoutes";
+import { fetchUser } from "../service/userService";
 import { fetchMessages } from "../service/chatService";
+import { getToken } from "../utils/userToken";
 
 const AllRoutes = () => {
     const dispatch = useDispatch();
-    const token = localStorage.getItem("token");
+    const token = getToken();
     const router = createBrowserRouter([
         {
             loader: async () => {
-                if (token && token !== "undefined") {
+                if (token) {
                     await dispatch(fetchUser());
                 }
                 return null;
@@ -73,7 +74,7 @@ const AllRoutes = () => {
                         },
                         {
                             path: "new-story",
-                            element: <Story />,
+                            element: <StoryForm />,
                         },
                     ],
                 },

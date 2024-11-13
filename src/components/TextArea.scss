@@ -1,0 +1,16 @@
+@import "../utils/styleConstants.scss";
+
+.text-area {
+    padding: 8px;
+    border: 1px solid $grey-100;
+    border-radius: 8px;
+    line-height: 1.2;
+    resize: none;
+    transition: border-color 0.3s;
+    font-family: inherit;
+
+    &:focus {
+        border-color: $grey-200;
+        outline: none;
+    }
+}

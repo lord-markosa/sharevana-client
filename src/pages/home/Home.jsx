@@ -1,15 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import StoryList from "./StoryList";
-import ChatList from "./ChatList";
-import ToggleSlider from "../components/ToggleSlider";
-import ConfirmationDialog from "../components/ConfirmationDialog";
-import FloatingAddButton from "../components/FloatingButton";
+import StoryList from "../story/StoryList";
+import ChatList from "../chat/ChatList";
+import ToggleSlider from "../../components/ToggleSlider";
+import ConfirmationDialog from "../../components/ConfirmationDialog";
+import FloatingAddButton from "../../components/FloatingButton";
 import { useDispatch, useSelector } from "react-redux";
-import { useConfirmation } from "../hooks/useConfirmation";
-import { fetchNewChat } from "../service/chatService";
-import { toggleActiveTab } from "../store/appConfigSlice";
-import { selectActiveTabIndex } from "../selectors/appConfigSelectors";
+import { useConfirmation } from "../../hooks/useConfirmation";
+import { fetchNewChat } from "../../service/chatService";
+import { toggleActiveTab } from "../../store/appConfigSlice";
+import { selectActiveTabIndex } from "../../selectors/appConfigSelectors";
 
 import "./Home.scss";
 

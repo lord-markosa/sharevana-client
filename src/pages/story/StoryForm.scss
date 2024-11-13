@@ -1,0 +1,25 @@
+.post-form {
+    margin: 12px 8px;
+    display: flex;
+    flex-direction: column;
+
+    .content-textarea {
+        margin-bottom: 12px;
+        font-size: 1rem;
+    }
+
+    .buttons-container {
+        display: flex;
+
+        .action-button {
+            &-0 {
+                margin: 0 4px 0 0;
+                flex: 1;
+            }
+            &-1 {
+                margin: 0 0 0 4px;
+                flex: 1;
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { IoMdMore } from "react-icons/io";
 import "./DropdownMenu.scss";
+import Button from "./Button";
 
 const DropdownMenu = ({ position = "left", options = [] }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -34,19 +35,20 @@ const DropdownMenu = ({ position = "left", options = [] }) => {
 
     return (
         <div className="dropdown-menu-container" ref={menuRef}>
-            <button className="menu-button" onClick={toggleMenu}>
-                <IoMdMore />
-            </button>
+            <Button type="transparent" onClick={toggleMenu}>
+                <IoMdMore size={20} />
+            </Button>
             {isOpen && (
                 <div className={`menu-options ${position}`}>
                     {options.map((option, index) => (
-                        <button
+                        <Button
+                            type="secondary"
                             key={index}
                             onClick={onOptionClickHandler(option)}
                             className="menu-option"
                         >
                             {option.label}
-                        </button>
+                        </Button>
                     ))}
                 </div>
             )}

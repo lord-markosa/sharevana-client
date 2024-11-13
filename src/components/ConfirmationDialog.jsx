@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "./Button";
 import "./ConfirmationDialog.scss";
 
 const ConfirmationDialog = ({ message, onConfirm, onCancel }) => (
@@ -6,12 +7,10 @@ const ConfirmationDialog = ({ message, onConfirm, onCancel }) => (
         <div className="confirmation-dialog">
             <div className="confirmation-dialog-message">{message}</div>
             <div className="confirmation-dialog-actions">
-                <button className="confirm-button" onClick={onConfirm}>
-                    Confirm
-                </button>
-                <button className="cancel-button" onClick={onCancel}>
+                <Button onClick={onConfirm}>Confirm</Button>
+                <Button type="secondary" onClick={onCancel}>
                     Cancel
-                </button>
+                </Button>
             </div>
         </div>
     </div>

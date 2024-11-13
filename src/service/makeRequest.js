@@ -1,14 +1,15 @@
 import axios from "axios";
 import { showToast } from "../store/appConfigSlice";
 import { API_URL } from "../utils/apiUrl";
+import { getToken } from "../utils/userToken";
 
 const makeRequest = async (
     url,
     method,
-    { getState, dispatch, rejectWithValue },
+    { dispatch, rejectWithValue },
     data
 ) => {
-    const token = getState().user.token || localStorage.getItem("token");
+    const token = getToken();
     try {
         const response = await axios({
             method,

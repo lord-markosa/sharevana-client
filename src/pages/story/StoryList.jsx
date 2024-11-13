@@ -1,10 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import StoryListItem from "../components/StoryListItem";
-import Spinner from "../components/Spinner";
-
-import "./StoryList.scss";
-import { selectStoryList } from "../selectors/storySelectors";
+import StoryListItem from "./StoryListItem";
+import Spinner from "../../components/Spinner";
+import { selectStoryList } from "../../selectors/storySelectors";
 
 const StoryList = ({ requestConfirmation }) => {
     const { loading, storyList } = useSelector(selectStoryList);

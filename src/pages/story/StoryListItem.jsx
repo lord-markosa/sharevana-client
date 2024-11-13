@@ -1,15 +1,18 @@
 import React from "react";
-import Persona from "./Persona";
-import DropdownMenu from "./DropdownMenu";
-import getFormattedTime from "../utils/getFormattedTime";
+import Persona from "../../components/Persona";
+import DropdownMenu from "../../components/DropdownMenu";
+import getFormattedTime from "../../utils/getFormattedTime";
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
-import { deleteStory, likeStory } from "../service/storyService";
+import { deleteStory, likeStory } from "../../service/storyService";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {
+    selectLikedStories,
+    selectUsername,
+} from "../../selectors/userSelectors";
 
 import "./StoryListItem.scss";
-import { selectLikedStories, selectUsername } from "../selectors/userSelectors";
 
 export default function StoryListItem({ story, requestConfirmation }) {
     const dispatch = useDispatch();

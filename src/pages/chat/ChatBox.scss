@@ -1,36 +1,36 @@
-@import "../utils/styleConstants.scss";
+@import "../../utils/styleConstants.scss";
 
 .chat-screen {
-    display: flex;
-    flex-direction: column;
-    background-color: #f5f5f5;
-    width: 100%;
+    @include page-standard;
+    background-color: $grey-50;
     height: 100vh;
 
     .chat-header {
         display: flex;
         align-items: center;
-        padding: 10px;
-        background-color: #ffffff;
-        border-bottom: 1px solid #e0e0e0;
+        padding: 8px;
+        background-color: white;
+        border-bottom: 1px solid $grey-100;
 
         .back-button {
-            background: none;
-            border: none;
-            cursor: pointer;
+            color: $black-200;
             margin-right: 8px;
+            &:hover,
+            &:active {
+                color: black;
+            }
         }
 
         .chat-title {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #333;
+            color: $black-200;
         }
     }
 
     .chat-messages {
         flex: 1;
-        padding: 8px;
+        padding: 0 8px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
@@ -52,8 +52,8 @@
 
             &.other {
                 align-self: flex-start;
-                background-color: #ffffff;
-                border: 1px solid #e0e0e0;
+                background-color: white;
+                border: 1px solid $grey-100;
             }
         }
     }
@@ -61,32 +61,19 @@
     .chat-footer {
         display: flex;
         align-items: center;
-        padding: 4px 4px 8px 4px;
-        background-color: #ffffff;
-        border-top: 1px solid #e0e0e0;
+        padding: 4px 4px 8px 8px;
+        background-color: white;
+        border-top: 1px solid $grey-100;
 
         .message-input {
             flex: 1;
-            resize: none;
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            line-height: 1.2;
-            font-family: inherit;
-            outline: none;
         }
 
         .send-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
             border-radius: 50%;
             padding: 10px;
             margin-left: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            @include centered;
         }
     }
 }
