@@ -10,7 +10,6 @@ import ChatBox from "../pages/chat/ChatBox";
 import AuthRoutes from "./AuthRoutes";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { fetchUser } from "../service/userService";
-import { fetchMessages } from "../service/chatService";
 import { getToken } from "../utils/userToken";
 
 const AllRoutes = () => {
@@ -64,13 +63,6 @@ const AllRoutes = () => {
                         {
                             path: "chat/:id",
                             element: <ChatBox />,
-                            loader: ({ params }) => {
-                                const chatId = params?.id;
-                                if (chatId) {
-                                    dispatch(fetchMessages({ chatId }));
-                                }
-                                return null;
-                            },
                         },
                         {
                             path: "new-story",

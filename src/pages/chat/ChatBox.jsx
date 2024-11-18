@@ -6,14 +6,14 @@ import { IoSend } from "react-icons/io5";
 import Persona from "../../components/Persona";
 import LoadingScreen from "../../components/LoadingScreen";
 import { initializePubSubClient } from "../../webPubSubClient/webPubSubClient";
-import { sendMessage } from "../../service/chatService";
+import { fetchMessages, sendMessage } from "../../service/chatService";
 import Spinner from "../../components/Spinner";
 import { selectWpsUrl } from "../../selectors/userSelectors";
 import { selectMessageDetailsById } from "../../selectors/chatSelectors";
 import Button from "../../components/Button";
+import TextArea from "../../components/TextArea";
 
 import "./ChatBox.scss";
-import TextArea from "../../components/TextArea";
 
 const ChatBox = () => {
     const params = useParams();
@@ -34,7 +34,10 @@ const ChatBox = () => {
         // Initialize the Web PubSub client already initialized
         // logic is handled inside this function
         initializePubSubClient(wpsUrl, dispatch);
-    }, []);
+        if (chatId && !messages && !isMessageLoading) {
+            dispatch(fetchMessages({ chatId }));
+        }
+    }, [chatId, messages, isMessageLoading, dispatch]);
 
     // Scroll to the bottom of the message list when new message is added
     useEffect(() => {

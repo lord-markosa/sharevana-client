@@ -46,7 +46,7 @@ const chatSlice = createSlice({
             })
 
             // Fetch new chat
-            .addCase(fetchNewChat.pending, (state, action) => {
+            .addCase(fetchNewChat.pending, (state) => {
                 state.isNewChatLoading = true;
             })
             .addCase(fetchNewChat.fulfilled, (state, action) => {
@@ -55,7 +55,7 @@ const chatSlice = createSlice({
                 }
                 state.isNewChatLoading = false;
             })
-            .addCase(fetchNewChat.rejected, (state, action) => {
+            .addCase(fetchNewChat.rejected, (state) => {
                 state.isNewChatLoading = false;
             })
 
